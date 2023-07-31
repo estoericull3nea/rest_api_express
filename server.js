@@ -11,6 +11,20 @@ const app = express()
 var accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), {
   flags: 'a',
 })
+
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*')
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+  )
+  if (req.method === 'OPTIONS') {
+    res.header('Access-Control-Allow-Method', 'PUT, POST, PATCH, GET, DELETE')
+    res.status(200).json({})
+  }
+  next()
+})
+
 app.use(morgan('combined', { stream: accessLogStream }))
 
 app.use('/', require('./routes/index_route'))
