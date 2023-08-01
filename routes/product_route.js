@@ -5,6 +5,7 @@ const {
   create_prod,
   update_prod,
   delete_prod,
+  delete_all_prod,
 } = require('../controllers/product_controller')
 // router.route('/').get(view_all_prods).post(create_prod)
 // router
@@ -15,6 +16,7 @@ const {
 
 router.get('/', view_all_prods)
 router.post('/', create_prod)
+router.delete('/clear', delete_all_prod)
 router.get('/:id', view_single_prod)
 router.patch('/:id', update_prod)
 router.delete('/:id', delete_prod)

@@ -1,5 +1,6 @@
 require('dotenv').config()
 
+// vars
 const express = require('express')
 const PORT = process.env.PORT || 3000
 const morgan = require('morgan')
@@ -13,6 +14,7 @@ var accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), {
   flags: 'a',
 })
 
+// built in middleware
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*')
   res.header(
@@ -29,12 +31,14 @@ app.use((req, res, next) => {
 app.use(morgan('combined', { stream: accessLogStream }))
 app.use(express.json())
 app.use(cookie_parser())
+
 // routes
 app.use('/', require('./routes/index_route'))
 app.use('/products', require('./routes/product_route'))
 app.use('/orders', require('./routes/order_route'))
 app.use('/users', require('./routes/user_route'))
 
+// error middleware
 app.use((req, res, next) => {
   const error = new Error('Not Found!')
   error.status = 404
@@ -50,6 +54,7 @@ app.use((error, req, res, next) => {
   })
 })
 
+// start function
 const start = () => {
   try {
     require('./config/db')(process.env.MONGO_URI_COMPASS)
