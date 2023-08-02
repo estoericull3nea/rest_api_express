@@ -4,16 +4,16 @@ const Product = require('../models/product_model')
 // create
 const create_order = async (req, res) => {
   try {
-    const { productId } = req.body
-    const find_prod = await Product.findById({ _id: productId })
+    const { product } = req.body
+    const find_prod = await Product.findById({ _id: product })
 
     if (!find_prod) {
       return res
         .status(404)
-        .json({ message: `No found with that ID ${productId}` })
+        .json({ message: `No found with that ID ${product}` })
     } else {
       const order = new Order({
-        productId,
+        product,
       })
 
       await order.save()
@@ -21,7 +21,7 @@ const create_order = async (req, res) => {
         message: 'Order Created!',
         OrderDetails: {
           _id: order._id,
-          ProductID: order.productId,
+          ProductID: order.product,
           OrderTime: order.orderTime,
         },
       })
@@ -36,7 +36,7 @@ const create_order = async (req, res) => {
 // read
 const view_all_order = async (req, res) => {
   try {
-    const find_all = await Order.find()
+    const find_all = await Order.find().populate('product')
     if (find_all.length === 0) {
       return res.status(404).json({ message: `Empty Order!` })
     }
@@ -53,7 +53,9 @@ const view_all_order = async (req, res) => {
 
 const view_single_order = async (req, res) => {
   try {
-    const find_one = await Order.findById({ _id: req.params.id })
+    const find_one = await Order.findById({ _id: req.params.id }).populate(
+      'product'
+    )
     if (!find_one) {
       return res
         .status(404)
