@@ -3,7 +3,6 @@ const {
   view_all_order,
   view_single_order,
   create_order,
-  update_order,
   delete_order,
 } = require('../controllers/order_controller')
 
@@ -17,7 +16,6 @@ const {
 router.get('/', view_all_order)
 router.post('/', create_order)
 router.get('/:id', view_single_order)
-router.patch('/:id', update_order)
 router.delete('/:id', delete_order)
 
 module.exports = router
