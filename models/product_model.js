@@ -18,6 +18,10 @@ const ProductSchema = new mongoose.Schema({
     type: Number,
     default: 1,
   },
+  image: {
+    type: String,
+    required: true,
+  },
 })
 
 module.exports = mongoose.model('Product', ProductSchema)

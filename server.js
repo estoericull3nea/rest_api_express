@@ -15,6 +15,9 @@ var accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), {
 })
 
 // built in middleware
+
+app.use('/uploads', express.static('uploads'))
+
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*')
   res.header(

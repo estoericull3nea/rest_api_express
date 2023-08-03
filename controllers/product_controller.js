@@ -1,8 +1,9 @@
 const Product = require('../models/product_model')
+const Order = require('../models/order_model')
 
 // create
 const create_prod = async (req, res) => {
-  const { name: n, description: des, price: p, quantity: q } = req.body
+  const { name: n, description: des, price: p, quantity: q, image } = req.body
   if (!n || !des || !p) {
     res.status(400).json({
       error: 'All fields must be required!',
@@ -13,6 +14,7 @@ const create_prod = async (req, res) => {
       description: des,
       price: p,
       quantity: q,
+      image: req.file.path,
     })
 
     await product.save()
@@ -28,8 +30,9 @@ const view_all_prods = async (req, res) => {
   try {
     const prods = await Product.find(
       {},
-      '_id name description price quantity createdAt'
+      '_id name description price quantity image createdAt'
     )
+
     const length = prods.length
 
     if (!length) {
@@ -40,13 +43,14 @@ const view_all_prods = async (req, res) => {
 
     if (length === 1) {
       return res.status(200).json({
-        message: 'Successfully fetch product!',
+        message: 'Successfully fetched product!',
         product: prods,
       })
     }
 
     return res.status(200).json({
-      message: 'Successfully fetch products!',
+      message: 'Successfully fetched products!',
+      count: prods.length,
       products: prods,
     })
   } catch (error) {
@@ -132,9 +136,10 @@ const delete_all_prod = async (req, res) => {
     }
 
     await Product.deleteMany()
+    await Order.deleteMany()
 
     res.status(200).json({
-      message: `Successfuly Deleted All!`,
+      message: `Successfuly Deleted All Products and Order!`,
     })
   } catch (error) {
     res.status(500).json({ message: `Something Went Wrong!` })
