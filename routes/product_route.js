@@ -7,6 +7,7 @@ const {
   delete_prod,
   delete_all_prod,
 } = require('../controllers/product_controller')
+
 const multer = require('multer')
 
 const storage = multer.diskStorage({
